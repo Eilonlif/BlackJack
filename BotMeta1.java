@@ -1,10 +1,7 @@
 package random_tarigilim.poker;
 
 public class BotMeta1 extends Bot {
-    public BotMeta1(int serialnumber, int botKindnum, boolean won) {
-        super(serialnumber, botKindnum, won);
-
-    }
+    public BotMeta1(int serialnumber, int botKindnum, boolean won) { super(serialnumber, botKindnum, won); }
     @Override
     public boolean turn() {
         super.turn();
@@ -13,8 +10,5 @@ public class BotMeta1 extends Bot {
             return true;
         }
         return false;
-//        for (Card c: super.hand.hand) {
-//
-//        }
     }
 }

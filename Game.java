@@ -6,54 +6,26 @@ public class Game {
     List<Bot> bots;
 
     public static Scanner in = new Scanner(System.in);
+    public int players;
+    public Game(int NumOfPlayers){ this.players = NumOfPlayers; }
     public void init(){
-        int players;
         this.gamedeck = new Deck();
         this.gamedeck.shuffle();
         this.bots = new ArrayList<Bot>();
-        players = 10;
-        for (int i = 0; i < players; i++) {
+
+        for (int i = 0; i < this.players; i++) {
             addbot(2, i);
         }
     }
 
-    public void addbot(int numberOfBotsTypes, int serialnum){
+    public void addbot(int numberOfBotsTypes, int serialnum){  // Keep attention for the BotMeta n (Let n be a positive whole number...)
         int tmp = (int)(Math.random() * numberOfBotsTypes);
         if(tmp == 0){
             this.bots.add(new BotMeta1(serialnum, 1, false));
         }
         if(tmp == 1){
-            this.bots.add(new BotMeta1(serialnum, 2, false));
+            this.bots.add(new BotMeta2(serialnum, 2, false));
         }
-    }
-
-    public void normailplay(){
-        String hitOrMiss;
-        for (Bot b: this.bots) {
-            b.hand.addCard(this.gamedeck.hit());
-            b.hand.addCard(this.gamedeck.hit());
-            b.hand.print();
-            while (!b.hand.folded){
-                System.out.println("The sum is: " + b.hand.sum()[0] + " or " + b.hand.sum()[1]);
-                System.out.println("Hit? ");
-                hitOrMiss = in.next();
-                if (hitOrMiss.equals("y")){
-                    b.hand.addCard(this.gamedeck.hit());
-                    System.out.println("Bot number: " + b.hand.playerNum + ", Kind: " + b.botKindnum + ", Hit! ");
-                    if(b.hand.sum()[0] > 21 && b.hand.sum()[1] > 21){
-                        b.hand.folded = true;
-                    }
-                    else{
-                        b.hand.print();
-                    }
-                }
-                else {
-                    b.hand.folded = true;
-                }
-            }
-            System.out.println("Bot number: " + b.hand.playerNum + ", Kind: " + b.botKindnum + ", Folded at " + b.hand.sum()[0] + " or " + b.hand.sum()[1] +"! ");
-        }
-        checkWin();
     }
 
     public void botplay() {
@@ -73,33 +45,30 @@ public class Game {
                     b.hand.folded = true;
                 }
             }
-            System.out.println("Bot number: " + b.hand.playerNum + ", Kind: " + b.botKindnum + ", Folded at " + b.hand.sum()[0] + " or " + b.hand.sum()[1] +"! ");
+//            System.out.println("Bot number: " + b.hand.playerNum + ", Kind: " + b.botKindnum + ", Folded at " + b.hand.sum()[0] + " or " + b.hand.sum()[1] +"! ");
         }
         checkWin();
     }
 
     public void checkWin(){
         int highest = 0;
-        for (Bot h: this.bots) {
-            if(h.hand.checkwin()){
+        for (Bot b: this.bots) {
+            if(b.hand.checkwin()){
+                System.out.println("Player: " + b.hand.playerNum + ", BotMeta: " + b.botKindnum + ", HighScore: " + b.hand.sum()[0] + "!\n");
+                b.won = true;
                 return;
             }
-            if(h.hand.sum()[0] > highest && h.hand.sum()[0] < 21){
-                highest = h.hand.sum()[0];
+            if(b.hand.sum()[0] > highest && b.hand.sum()[0] < 21){
+                highest = b.hand.sum()[0];
             }
-            if(h.hand.sum()[1] > highest && h.hand.sum()[1] < 21){
-                highest = h.hand.sum()[1];
+            if(b.hand.sum()[1] > highest && b.hand.sum()[1] < 21){
+                highest = b.hand.sum()[1];
             }
         }
-        for (Bot h: this.bots) {
-            if (h.hand.sum()[0] == highest){
-//                System.out.println("Player number " + h.hand.playerNum + " won with  the highest sum of: " + h.hand.sum()[0]);
-                h.won = true;
-                return;
-            }
-            if(h.hand.sum()[1] == highest){
-//                System.out.println("Player number " + h.hand.playerNum + " won with  the highest sum of: " + h.hand.sum()[1]);
-                h.won = true;
+        for (Bot b: this.bots) {
+            if (b.hand.sum()[0] == highest || b.hand.sum()[1] == highest){
+                System.out.println("Player: " + b.hand.playerNum + ", BotMeta: " + b.botKindnum + ", HighScore: " + b.hand.sum()[0] + "\n");
+                b.won = true;
                 return;
             }
         }

@@ -43,7 +43,6 @@ public class Hand {
 
     public boolean checkwin(){
         if(this.sum()[0] == 21 || this.sum()[1] == 21){
-            System.out.println("Player number " + this.playerNum + " won! ");
             return true;
         }
         return false;
