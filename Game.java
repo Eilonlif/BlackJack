@@ -12,7 +12,6 @@ public class Game {
         this.gamedeck = new Deck();
         this.gamedeck.shuffle();
         this.bots = new ArrayList<Bot>();
-
         for (int i = 0; i < this.players; i++) {
             addbot(2, i);
         }
@@ -48,6 +47,9 @@ public class Game {
 //            System.out.println("Bot number: " + b.hand.playerNum + ", Kind: " + b.botKindnum + ", Folded at " + b.hand.sum()[0] + " or " + b.hand.sum()[1] +"! ");
         }
         checkWin();
+        if(botTypeWin() == -1){
+            System.out.println("No one Won!\n");
+        }
     }
 
     public void checkWin(){
